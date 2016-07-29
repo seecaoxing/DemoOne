@@ -15,7 +15,7 @@ public class CustomDrawable extends Drawable {
     private Paint mPaint;
 
     public CustomDrawable() {
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.RED);
     }
 
@@ -24,6 +24,7 @@ public class CustomDrawable extends Drawable {
         final Rect r = getBounds();
         float cx = r.exactCenterX();
         float cy = r.exactCenterY();
+        canvas.drawCircle(cx, cy, Math.min(cx, cy), mPaint);
 
     }
 
@@ -41,7 +42,17 @@ public class CustomDrawable extends Drawable {
 
     @Override
     public int getOpacity() {
-
         return PixelFormat.TRANSLUCENT;
+    }
+
+    //当自定义的Drawable有固有大小时，最好重写这两个方法，因为他会影响到View的wrap_content布局
+    @Override
+    public int getIntrinsicHeight() {
+        return super.getIntrinsicHeight();
+    }
+
+    @Override
+    public int getIntrinsicWidth() {
+        return super.getIntrinsicWidth();
     }
 }

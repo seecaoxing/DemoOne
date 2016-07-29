@@ -1,0 +1,17 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+    <objectAnimator
+        android:duration="3000"
+        android:propertyName="x"
+        android:valueTo="200"
+        android:repeatMode="restart"
+        android:valueType="intType" />
+    <objectAnimator
+        android:duration="3000"
+        android:propertyName="y"
+        android:valueTo="500"
+        android:repeatMode="restart"
+        android:valueType="intType" />
+
+
+</set>
