@@ -9,9 +9,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.Settings;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -32,7 +35,7 @@ public class MainActivity extends Activity {
         notification = builder.setContentIntent(pendingIntent).setContentTitle("title").setContentText("asdfasfdsa").build();
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(1, notification);
-
+        //自定义Drawable
         customDrawable = new CustomDrawable();
         ImageView imageView = (ImageView) findViewById(R.id.image);
         imageView.setBackground(customDrawable);
@@ -42,9 +45,10 @@ public class MainActivity extends Activity {
 //        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.property_animator);
 //        set.setTarget(mButton);
 //        set.start();
+//        ViewWrapper mButton = new ViewWrapper(button);
 
         AnimatorSet set = new AnimatorSet();
-        set.playTogether(
+        set.playTogether(     
                 ObjectAnimator.ofFloat(mButton, "rotationX", 0, 360),
                 ObjectAnimator.ofFloat(mButton, "rotationY", 0, 180),
                 ObjectAnimator.ofFloat(mButton, "rotation", 0, -90),
@@ -53,11 +57,13 @@ public class MainActivity extends Activity {
                 ObjectAnimator.ofFloat(mButton, "scaleX", 1, 1.5f),
                 ObjectAnimator.ofFloat(mButton, "scaleY", 1, 0.5f),
                 ObjectAnimator.ofFloat(mButton, "alpha", 1, 0.25f, 1)
+         //       ObjectAnimator.ofFloat(mButton,"width",500)
 
         );
         //  set.setTarget(imageView);
         set.setDuration(5 * 1000).start();
 
+        LruCache<String ,Bitmap> lruCache ;
 
     }
 
@@ -65,5 +71,18 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         System.out.println();
+    }
+    private static class ViewWrapper{
+        private View mTarget;
+        public ViewWrapper(View Target){
+            mTarget = Target;
+        }
+        public int getWidth(){
+            return mTarget.getLayoutParams().width;
+        }
+        public void setWidth(int width){
+            mTarget.getLayoutParams().width = width;
+            mTarget.requestLayout();
+        }
     }
 }
