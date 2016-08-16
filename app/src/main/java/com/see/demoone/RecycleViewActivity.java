@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -17,13 +18,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**RecylerView的用法
+/**
+ * RecylerView的用法
  * Created by see on 2016/8/16.
  */
 public class RecycleViewActivity extends Activity {
-    private  List<String> textList;
-    private  List<String> urlList;
+    private List<String> textList;
+    private List<String> urlList;
     private RecyclerViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +34,12 @@ public class RecycleViewActivity extends Activity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.id_recyclerview);
 
         textList = new ArrayList<String>();
-        for (int i = 0;i<10000;i++)
-        {
-            textList.add("第"+i+"个item");
+        for (int i = 0; i < 10000; i++) {
+            textList.add("第" + i + "个item");
 
         }
         urlList = new ArrayList<String>();
-        for (int j = 0; j<2000;j++){
+        for (int j = 0; j < 2000; j++) {
             urlList.add("http://img4.imgtn.bdimg.com/it/u=1270641523,992229015&fm=21&gp=0.jpg");
             urlList.add("http://pic.qiantucdn.com/58pic/16/10/68/01e58PICTZj_1024.jpg");
             urlList.add("http://pic.qiantucdn.com/58pic/17/37/24/15658PICESm_1024.png");
@@ -45,52 +47,22 @@ public class RecycleViewActivity extends Activity {
             urlList.add("http://pic.qiantucdn.com/58pic/16/10/23/81A58PICm6G_1024.jpg");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new RecyclerViewAdapter(getApplicationContext(), textList, urlList);
+        recyclerView.setAdapter(adapter);
 
-        recyclerView.setAdapter(adapter = new RecyclerViewAdapter(getApplicationContext(),textList,urlList));
-
-
-
-    }
-
-
-    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.VH> {
-        private List<String> textList;
-        private List<String> urlList;
-        private Context context;
-        public RecyclerViewAdapter(Context context , List<String> textlist, List<String> urlList) {
-            this.context = context;
-            this.textList = textlist;
-            this.urlList = urlList;
-        }
-
-        @Override
-        public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-            VH holder = new VH(LayoutInflater.from(RecycleViewActivity.this)
-                    .inflate(R.layout.item_recyclerview, parent, false));
-
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(VH holder, int position) {
-            holder.tv.setText(textList.get(position));
-            holder.iv.setImageURI(Uri.parse(urlList.get(position)));//使用Fresco显示图片
-        }
-
-        @Override
-        public int getItemCount() {
-            return textList.size();
-        }
-
-        class VH extends RecyclerView.ViewHolder {
-            TextView tv;
-            SimpleDraweeView iv;
-
-            public VH(View itemView) {
-                super(itemView);
-                tv = (TextView) itemView.findViewById(R.id.text);
-                iv = (SimpleDraweeView) itemView.findViewById(R.id.image_view);
+        //设置点击和长按监听
+        adapter.setOnItemClickLitener(new RecyclerViewAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getApplicationContext(),position+"click",Toast.LENGTH_SHORT).show();
             }
-        }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+                Toast.makeText(getApplicationContext(),position+"longClick",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }
